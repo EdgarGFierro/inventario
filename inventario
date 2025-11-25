@@ -1,0 +1,30 @@
+#include <iostream> // Libreria estandar para usar cin y cout
+#include <cstdlib>  // Libreria para usar comandos del sistema como limpiar pantalla
+#include <string>   // Libreria para poder usar variables de texto (string)
+#include <iomanip>  // Libreria para dar formato y alinear las tablas (setw)
+#include <limits>   // Libreria necesaria para limpiar el buffer de entrada
+
+using namespace std; // Nos ahorra escribir std:: antes de cada comando
+
+// Estructura que agrupa los datos de cada articulo
+struct Producto {
+    int id;           // Codigo unico del producto
+    string nombre;    // Nombre del articulo
+    float precio;     // Precio con decimales
+    int cantidad;     // Stock disponible
+};
+
+// Prototipos: Avisamos al compilador que estas funciones existen
+void limpiarPantalla();
+void baseDeDatos(Producto inventario[]);
+void mostrarMenu();
+void mostrarInventario(Producto inventario[], int
+nt main() {
+    const int N = 15; // Definimos el tamano maximo del inventario (constante)
+    Producto inventario[N]; // Creamos el arreglo de estructuras
+    int opcion; // Variable para guardar la eleccion del menu principal
+
+    // Llamamos a la funcion que carga los datos iniciales
+    baseDeDatos(inventario);
+
+    bool sistemaActivo = true; // Variable bandera para controlar el ciclo del programa
