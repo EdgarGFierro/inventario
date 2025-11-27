@@ -127,3 +127,91 @@ void mostrarInventario(Producto inventario[], int n) {
     cout << endl << "Presiona Enter para volver...";
     cin.ignore(); cin.get(); // Esperamos a que el usuario de Enter
 }
+// Algoritmo de burbuja para ordenar los productos
+void ordenarProductos(Producto inventario[], int n) {
+    int tipoOrden; // Variable para guardar si ordenamos por precio o cantidad
+    Producto temp; // Variable auxiliar para hacer el intercambio temporal
+
+    limpiarPantalla();
+    cout << "Ordenar por: 1. Precio  |  2. Cantidad" << endl;
+    cin >> tipoOrden;
+
+    // Primer ciclo: controla las pasadas
+    for(int i = 0; i < n - 1; i++) {
+        // Segundo ciclo: compara elementos adyacentes
+        for(int j = 0; j < n - 1; j++) {
+            bool intercambio = false; // Bandera para saber si hay que mover cosas
+
+            // Decidimos si intercambiar segun el criterio (Precio o Cantidad)
+            if (tipoOrden == 1) {
+                if (inventario[j].precio > inventario[j+1].precio) intercambio = true;
+            } else if (tipoOrden == 2) {
+                if (inventario[j].cantidad > inventario[j+1].cantidad) intercambio = true;
+            }
+
+            // Si estan desordenados, hacemos el cambio (swap)
+            if (intercambio) {
+                temp = inventario[j];          // Guardamos el actual
+                inventario[j] = inventario[j+1]; // Movemos el siguiente al actual
+                inventario[j+1] = temp;          // Ponemos el guardado en el siguiente
+            }
+        }
+    }
+    cout << "Lista ordenada." << endl;
+    cout << "Presiona Enter para ver la lista...";
+    cin.ignore(); cin.get();
+    mostrarInventario(inventario, n); // Mostramos la lista ya ordenada
+}
+
+// Funcion para buscar un producto y mostrar sus opciones
+void gestionarProducto(Producto inventario[], int n) {
+    int idBusqueda; // Variable para almacenar el ID que el usuario busca
+    Producto *p = NULL; // Puntero para apuntar al producto encontrado
+
+    limpiarPantalla();
+    cout << "INGRESA EL ID DEL PRODUCTO:" << endl;
+    cin >> idBusqueda;
+
+    // Busqueda secuencial: revisamos uno por uno
+    for(int i = 0; i < n; i++) {
+        if (inventario[i].id == idBusqueda) {
+            p = &inventario[i]; // Guardamos la direccion de memoria del producto
+            break; // Terminamos el ciclo porque ya lo encontramos
+        }
+    }
+
+    // Si el puntero sigue siendo NULL, no encontramos nada
+    if (p == NULL) {
+        cout << "Producto no encontrado." << endl;
+        cout << "Presiona Enter...";
+        cin.ignore(); cin.get();
+        return;
+    }
+
+    int subOpcion; // Variable para la opcion del submenu
+    limpiarPantalla();
+    // Usamos -> para acceder a los datos a traves del puntero
+    cout << "PRODUCTO: " << p->nombre << endl;
+    cout << "Precio: $" << p->precio << " | Stock: " << p->cantidad << endl;
+    cout << endl;
+    cout << "Que deseas hacer?" << endl;
+    cout << "1. Registrar VENTA" << endl;
+    cout << "2. Registrar ENTRADA (Surtir)" << endl;
+    cout << "3. CORREGIR Stock (Error de dedo)" << endl;
+    cout << "4. CAMBIAR PRECIO" << endl; 
+    cout << "5. Nada (Regresar)" << endl;
+    cin >> subOpcion;
+
+    // Llamamos a la funcion correspondiente enviando el puntero p
+    switch(subOpcion) {
+        case 1: realizarVenta(p); break;
+        case 2: registrarEntrada(p); break;
+        case 3: corregirStock(p); break;
+        case 4: cambiarPrecio(p); break; 
+        case 5: break; 
+        default: cout << "Opcion invalida." << endl;
+    }
+    
+    cout << "Presiona Enter para continuar...";
+    cin.ignore(); cin.get();
+}
