@@ -18,8 +18,15 @@ struct Producto {
 void limpiarPantalla();
 void baseDeDatos(Producto inventario[]);
 void mostrarMenu();
-void mostrarInventario(Producto inventario[], int
-nt main() {
+void mostrarInventario(Producto inventario[], int n);
+void ordenarProductos(Producto inventario[], int n);
+void gestionarProducto(Producto inventario[], int n); 
+void realizarVenta(Producto *p);       
+void registrarEntrada(Producto *p);    
+void corregirStock(Producto *p);       
+void cambiarPrecio(Producto *p); 
+
+int main() {
     const int N = 15; // Definimos el tamano maximo del inventario (constante)
     Producto inventario[N]; // Creamos el arreglo de estructuras
     int opcion; // Variable para guardar la eleccion del menu principal
@@ -28,3 +35,95 @@ nt main() {
     baseDeDatos(inventario);
 
     bool sistemaActivo = true; // Variable bandera para controlar el ciclo del programa
+
+    // Ciclo principal: se repite mientras sistemaActivo sea verdadero
+    while (sistemaActivo) {
+        limpiarPantalla(); // Limpiamos la consola para que se vea ordenado
+        mostrarMenu();     // Mostramos las opciones
+        cout << "Elige una opcion: ";
+        cin >> opcion;     // Leemos la opcion del usuario
+
+        // Evaluamos la opcion elegida
+        switch (opcion) {
+            case 1:
+                mostrarInventario(inventario, N);
+                break;
+            case 2:
+                gestionarProducto(inventario, N); // Entramos al menu de acciones
+                break;
+            case 3:
+                ordenarProductos(inventario, N);
+                break;
+            case 4:
+                cout << "Cerrando sistema..." << endl;
+                sistemaActivo = false; // Cambiamos a falso para salir del while
+                break;
+            default:
+                cout << "Opcion no valida." << endl;
+                cout << "Presiona Enter...";
+                cin.ignore(); cin.get(); // Pausa simple
+        }
+    }
+
+    return 0; // Fin del programa
+}
+
+// Funcion para borrar lo que hay en la consola
+void limpiarPantalla() {
+    #ifdef _WIN32
+        system("cls"); // Comando para Windows
+    #else
+        system("clear"); // Comando para Linux/Mac
+    #endif
+}
+
+// Funcion para llenar el arreglo con datos de prueba
+void baseDeDatos(Producto inventario[]) {
+    // Asignamos valores directos a cada posicion del arreglo
+    inventario[0] = {10, "Borrador", 5.00, 50};
+    inventario[1] = {20, "Lapiz", 8.50, 100};
+    inventario[2] = {30, "Pluma", 12.00, 80};
+    inventario[3] = {40, "Libreta", 45.00, 30};
+    inventario[4] = {50, "Calculadora", 150.00, 10};
+    inventario[5] = {60, "Regla", 15.00, 40};
+    inventario[6] = {70, "Tijera", 25.00, 25};
+    inventario[7] = {80, "Marcatextos", 18.00, 60};
+    inventario[8] = {90, "Grapadora", 65.00, 15};
+    inventario[9] = {100, "Plumon", 22.00, 70};
+    inventario[10] = {110, "Clip", 1.50, 500};
+    inventario[11] = {120, "Hojas", 0.50, 1000};
+    inventario[12] = {130, "Carpetas", 15.00, 40};
+    inventario[13] = {140, "Sacapuntas", 5.00, 55};
+    inventario[14] = {150, "Pegamento", 12.50, 35};
+}
+
+void mostrarMenu() {
+    cout << "PAPELERIA EL PAPELITO FELIZ" << endl;
+    cout << "1. Ver todo el inventario" << endl;
+    cout << "2. Buscar (Vender / Surtir / Editar)" << endl;
+    cout << "3. Ordenar lista" << endl;
+    cout << "4. Salir" << endl;
+}
+
+// Recorre el arreglo e imprime los datos en forma de tabla
+void mostrarInventario(Producto inventario[], int n) {
+    limpiarPantalla();
+    
+    // setw ayuda a alinear las columnas dejando espacios fijos
+    cout << left << setw(5) << "ID" 
+         << setw(15) << "Nombre" 
+         << setw(10) << "Precio" 
+         << setw(10) << "Stock" << endl;
+    
+    // Ciclo for para recorrer todos los productos
+    for(int i = 0; i < n; i++) {
+        cout << left << setw(5) << inventario[i].id 
+             << setw(15) << inventario[i].nombre 
+             // fixed y setprecision(2) obligan a mostrar 2 decimales
+             << "$" << setw(9) << fixed << setprecision(2) << inventario[i].precio 
+             << setw(10) << inventario[i].cantidad << endl;
+    }
+    
+    cout << endl << "Presiona Enter para volver...";
+    cin.ignore(); cin.get(); // Esperamos a que el usuario de Enter
+}
