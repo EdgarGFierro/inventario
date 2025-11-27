@@ -127,6 +127,7 @@ void mostrarInventario(Producto inventario[], int n) {
     cout << endl << "Presiona Enter para volver...";
     cin.ignore(); cin.get(); // Esperamos a que el usuario de Enter
 }
+
 // Algoritmo de burbuja para ordenar los productos
 void ordenarProductos(Producto inventario[], int n) {
     int tipoOrden; // Variable para guardar si ordenamos por precio o cantidad
@@ -214,4 +215,67 @@ void gestionarProducto(Producto inventario[], int n) {
     
     cout << "Presiona Enter para continuar...";
     cin.ignore(); cin.get();
+}
+
+// Funcion para registrar ventas (resta inventario)
+void realizarVenta(Producto *p) {
+    int cantidadVenta; // Variable para saber cuantos se venden
+    cout << "Cuantos productos se vendieron?" << endl;
+    cin >> cantidadVenta;
+
+    if (cantidadVenta <= 0) {
+        cout << "Cantidad invalida." << endl;
+        return;
+    }
+
+    // Verificamos si hay suficientes productos
+    if (p->cantidad >= cantidadVenta) {
+        p->cantidad -= cantidadVenta; // Modificamos el valor original en memoria
+        cout << "Venta registrada." << endl;
+    } else {
+        cout << "Error: No hay suficiente stock." << endl;
+    }
+}
+
+// Funcion para surtir inventario (suma inventario)
+void registrarEntrada(Producto *p) {
+    int cantidadEntrada; // Variable para saber cuantos llegaron
+    cout << "Cuantos productos llegaron?" << endl;
+    cin >> cantidadEntrada;
+
+    if (cantidadEntrada > 0) {
+        p->cantidad += cantidadEntrada; // Sumamos al valor original
+        cout << "Entrada registrada." << endl;
+    } else {
+        cout << "Cantidad debe ser mayor a 0." << endl;
+    }
+}
+
+// Funcion para corregir errores (sobrescribe inventario)
+void corregirStock(Producto *p) {
+    int nuevoStock; // Variable para el nuevo valor corregido
+    cout << "Ingresa la cantidad real (Correccion):" << endl;
+    cin >> nuevoStock;
+
+    if (nuevoStock >= 0) {
+        p->cantidad = nuevoStock; // Reemplazamos el valor anterior
+        cout << "Inventario corregido." << endl;
+    } else {
+        cout << "El stock no puede ser negativo." << endl;
+    }
+}
+
+// Funcion para actualizar el precio
+void cambiarPrecio(Producto *p) {
+    float nuevoPrecio; // Variable para guardar el precio nuevo que de el usuario
+    cout << "El precio actual es: $" << p->precio << endl;
+    cout << "Ingresa el nuevo precio:" << endl;
+    cin >> nuevoPrecio;
+
+    if (nuevoPrecio > 0) {
+        p->precio = nuevoPrecio; // Cambiamos el precio original
+        cout << "Precio actualizado correctamente." << endl;
+    } else {
+        cout << "El precio debe ser mayor a 0." << endl;
+    }
 }
